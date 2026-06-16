@@ -31,3 +31,6 @@ jobs:
       
       - name: Build docker image
         run:  gcloud builds submit --tag us-central1-docker.pkg.dev/buoyant-aloe-499517-n7/notely-ar-repo/notely:latest .
+
+      - name: Deploy to Cloud Run
+        run: gcloud run deploy notely --image us-central1-docker.pkg.dev/buoyant-aloe-499517-n7/notely-ar-repo/notely:latest --region us-central1 --allow-unauthenticated --project buoyant-aloe-499517-n7 --max-instances=4
