@@ -20,6 +20,9 @@ jobs:
         uses: actions/setup-go@v5
         with:
           go-version: "1.26.0"
+      
+      - name: Setup goose
+        run: go install github.com/pressly/goose/v3/cmd/goose@latest
 
       - name: run scripts/buildprod
         run: ./scripts/buildprod.sh
@@ -34,9 +37,11 @@ jobs:
       
       - name: Build docker image
         run:  gcloud builds submit --tag us-central1-docker.pkg.dev/buoyant-aloe-499517-n7/notely-ar-repo/notely:latest .
+      
+      - name: migrations
+        run: ./scripts/migrateup.sh
 
       - name: Deploy to Cloud Run
         run: gcloud run deploy notely --image us-central1-docker.pkg.dev/buoyant-aloe-499517-n7/notely-ar-repo/notely:latest --region us-central1 --allow-unauthenticated --project buoyant-aloe-499517-n7 --max-instances=4
 
-      - name: migrations
-        run: ./scripts/migrateup.sh
+      
